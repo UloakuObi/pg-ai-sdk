@@ -1,14 +1,24 @@
-import { streamText, UIMessage, convertToModelMessages } from 'ai';
+import { google } from '@ai-sdk/google';
+import { generateText } from 'ai';
+import { inngest } from "@/inngest/client"
+
+// import { createGoogleGenerativeAI } from '@ai-sdk/google';
+
+// const google = createGoogleGenerativeAI({
+//   apiKey: "AIzaSyBnEsFmApHQVpjruu5n2TrgwoCLpfAXcHU"
+// })
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+ 
+  const response =  await generateText({
+  model: google('gemini-2.5-flash'),
+  prompt: 'Write a vegetarian lasagna recipe for 4 people.',
+});
 
-  const result = streamText({
-    model: "google/gemini-2.5-flash",
-    messages: await convertToModelMessages(messages),
-  });
-
-  return result.toUIMessageStreamResponse();
+  return Response.json({ response })
+  
 }
+
+
 
 
